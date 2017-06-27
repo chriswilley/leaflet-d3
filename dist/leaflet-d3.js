@@ -22,7 +22,7 @@ var d3_hexbin = (null != d3.hexbin)? d3.hexbin : (null != d3Hexbin)? d3Hexbin.he
  * Leaflet < 1.x
  */
 L.HexbinLayer = (L.Layer ? L.Layer : L.Class).extend({
-	includes: [ L.Mixin.Events ],
+	includes: [ L.Evented ],
 
 	/**
 	 * Default options
@@ -647,7 +647,7 @@ L.hexbinLayer = function(options) {
  * Leaflet < 1.x
  */
 L.PingLayer = (L.Layer ? L.Layer : L.Class).extend({
-	includes: [ L.Mixin.Events ],
+	includes: [ L.Evented ],
 
 	/*
 	 * Default options

@@ -7,7 +7,7 @@ import 'leaflet';
  * Leaflet < 1.x
  */
 L.PingLayer = (L.Layer ? L.Layer : L.Class).extend({
-	includes: [ L.Mixin.Events ],
+	includes: [ L.Evented ],
 
 	/*
 	 * Default options
