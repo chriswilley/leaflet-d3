@@ -28,7 +28,10 @@ L.HexbinLayer = (L.Layer ? L.Layer : L.Class).extend({
 		radius : 12,
 		radiusUnits: 'pixels', // acceptable values are 'pixels' and 'meters'
 		opacity: 0.6,
+        hasStroke: true,
+        strokeColor: '#000000',
 		strokeOpacity: 0.6,
+        strokeWidth: 0.5,
 		duration: 200,
 
 		colorScaleExtent: [ 1, undefined ],
@@ -94,6 +97,18 @@ L.HexbinLayer = (L.Layer ? L.Layer : L.Class).extend({
 
 		// Set up a placeholder value for radii converted from meters
 		this._convertedRadius = 0;
+
+        // Set up stroke attributes
+        if (this.options.hasStroke) {
+            this._strokeColor = this.options.strokeColor;
+            this._strokeOpacity = this.options.strokeOpacity;
+            this._strokeWidth = this.options.strokeWidth + 'px';
+        }
+        else {
+            this._strokeColor = null;
+            this._strokeOpacity = null;
+            this.strokeWidth = null;
+        }
 
         // Set up object to hold the colorRangeExtent for use in the calling function
         // This is useful for helping the user manipulate the range extent
@@ -345,7 +360,9 @@ L.HexbinLayer = (L.Layer ? L.Layer : L.Class).extend({
 		join.transition().duration(that.options.duration)
 			.attr('fill', that._fn.fill.bind(that))
 			.attr('fill-opacity', that.options.opacity)
-			.attr('stroke-opacity', that.options.strokeOpacity)
+            .attr('stroke', that._strokeColor)
+			.attr('stroke-opacity', that._strokeOpacity) //that.options.strokeOpacity)
+            .attr('stroke-width', that._strokeWidth)
 			.attr('d', function(d) {
 				if (that.options.radiusUnits === 'pixels') {
 					return that._hexLayout.hexagon(that._scale.radius(that._fn.radiusValue.call(that, d)));
@@ -371,13 +388,17 @@ L.HexbinLayer = (L.Layer ? L.Layer : L.Class).extend({
 			})
 			.attr('fill', that._fn.fill.bind(that))
 			.attr('fill-opacity', that.options.opacity)
-			.attr('stroke-opacity', that.options.strokeOpacity)
+            .attr('stroke', that._strokeColor)
+            .attr('stroke-opacity', that._strokeOpacity) //that.options.strokeOpacity)
+            .attr('stroke-width', that._strokeWidth)
 			.on('mouseover', function(d, i) { that._dispatch.call('mouseover', this, d, i); })
 			.on('mouseout', function(d, i) { that._dispatch.call('mouseout', this, d, i); })
 			.on('click', function(d, i) { that._dispatch.call('click', this, d, i); })
 			.transition().duration(that.options.duration)
 				.attr('fill-opacity', that.options.opacity)
-				.attr('stroke-opacity', that.options.strokeOpacity)
+                .attr('stroke', that._strokeColor)
+                .attr('stroke-opacity', that._strokeOpacity) //that.options.strokeOpacity)
+                .attr('stroke-width', that._strokeWidth)
 				.attr('d', function(d) {
 					if (that.options.radiusUnits === 'pixels') {
 						return that._hexLayout.hexagon(that._scale.radius(that._fn.radiusValue.call(that, d)));
@@ -392,7 +413,9 @@ L.HexbinLayer = (L.Layer ? L.Layer : L.Class).extend({
 		join.exit()
 			.transition().duration(that.options.duration)
 				.attr('fill-opacity', that.options.opacity)
-				.attr('stroke-opacity', that.options.strokeOpacity)
+                .attr('stroke', that._strokeColor)
+                .attr('stroke-opacity', that._strokeOpacity) //that.options.strokeOpacity)
+                .attr('stroke-width', that._strokeWidth)
 				.attr('d', function(d) {
 					return that._hexLayout.hexagon(0);
 				})
