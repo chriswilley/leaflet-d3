@@ -489,14 +489,15 @@ L.HexbinLayer = (L.Layer ? L.Layer : L.Class).extend({
 			.y(function(d) { return d.point[1]; });
 	},
     _calcMPPX: function(map) {
+            var pointAdjust = map.getZoom() + 8;
             var centerLatLng = map.getCenter(); // get map center
             var pointC = map.latLngToContainerPoint(centerLatLng); // convert to containerpoint (pixels)
-            var pointX = [ pointC.x + 1, pointC.y ]; // add one pixel to x
+            var pointX = [ pointC.x + pointAdjust, pointC.y ]; // add one pixel to x
 
             // convert containerpoints to latlng's
             var latLngC = map.containerPointToLatLng(pointC);
             var latLngX = map.containerPointToLatLng(pointX);
-            return latLngC.distanceTo(latLngX); // calculate distance between c and x (latitude)
+            return latLngC.distanceTo(latLngX) / pointAdjust; // calculate distance between c and x (latitude)
     },
     _calcMPPY: function(map) {
             var pointAdjust = map.getZoom() + 8;
